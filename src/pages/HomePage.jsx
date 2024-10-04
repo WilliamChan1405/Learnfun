@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
+
 import 'swiper/swiper-bundle.css'; // untuk Swiper 10.x
 ;
  // Pastikan untuk mengimpor CSS
@@ -39,7 +40,6 @@ const HomePage = () => {
         </section>
 
         {/* Testimonial Section */}
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@latest/swiper-bundle.min.css" />
         <section className="bg-pink-100 p-6 rounded-lg mb-10">
           <div className="flex items-center">
             <div className="bg-purple-400 p-10 rounded-lg">
