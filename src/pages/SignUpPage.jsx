@@ -1,7 +1,9 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
+import LoginPage from './LoginPage';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import img from '../assets/a1.png';
+
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -106,7 +108,7 @@ const SignUpPage = () => {
 
           <p className="mt-8 text-center text-sm text-gray-600 font-inter">
             Sudah punya akun?{" "}
-            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+            <a href="/login" className="font-medium text-blue-600 hover:text-blue-500">
               Masuk
             </a>
           </p>

@@ -7,3 +7,23 @@
   font-family: "Inter";
   src: url("./fonts/inter.ttf") format("truetype");
 }
+/* Style untuk scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #60a5fa, #c084fc); /* Blue (#60a5fa) di atas, Purple (#c084fc) di bawah */
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #3b82f6, #a855f7); /* Hover effect: lebih gelap */
+}
+
+

@@ -1,50 +1,66 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import LoginPage from "./LoginPage"; 
 import QuestPage from "./QuestPage";  // Impor QuestPage
+import img from '../assets/LF.png';
+import LoginPage from './LoginPage';  // Impor LoginPage
+import ProfilePage from "./ProfilePage";
+import AnPage from "./AnPage";
 
 import 'swiper/swiper-bundle.css'; // Import Swiper CSS
 
 const HomePage = () => {
   const [showLogin, setShowLogin] = useState(false); // State to toggle login page
   const [showQuestPage, setShowQuestPage] = useState(false); // State to toggle quest page
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State untuk menyimpan status login
 
-  // Function to handle login button click
   const handleLoginClick = () => {
     setShowLogin(true);
   };
 
-  // Function to hide login page (can be called from LoginPage component)
   const handleCloseLogin = () => {
     setShowLogin(false);
   };
 
-  // Function to handle "Ajukan Pertanyaan" button click
   const handleQuestClick = () => {
     setShowQuestPage(true);
+  };
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true); // Mengubah status login ke true saat login berhasil
+    setShowLogin(false); // Menutup halaman login
   };
 
   return (
     <div>
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-400 to-blue-400 p-6 text-white">
+      <header className="bg-gradient-to-r from-purple-400 to-blue-400 p-6 text-white fixed top-0 w-full z-50 shadow-lg">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center">
             <div className="bg-black p-2 rounded-full">
+              <img src={img} alt="Logo LF" className="h-8 w-8" />
               <i className="fas fa-graduation-cap text-white"></i>
             </div>
             <span className="ml-3 text-2xl font-bold">LearnFun</span>
           </div>
           <div>
-            <button onClick={handleLoginClick} className="mr-4 text-white">Masuk</button>
-            <Link to={'/signup'} className="bg-blue-600 px-4 py-2 rounded text-white">Daftar</Link>
+            {!isLoggedIn ? ( // Tampilkan tombol masuk dan daftar jika belum login
+              <>
+                <button onClick={handleLoginClick} className="mr-4 text-white">Masuk</button>
+                <Link to={'/signup'} className="bg-blue-600 px-4 py-2 rounded text-white">Daftar</Link>
+              </>
+            ) : ( // Tampilkan tombol profile jika sudah login
+              <Link to="/profile">
+             <button className="bg-gray-500 text-white px-4 py-2 rounded">Profile</button>
+              </Link>
+
+            )}
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto mt-10">
+      <main className="container mx-auto pt-24">
         {!showLogin && !showQuestPage ? (
           <>
             {/* Hero Section */}
@@ -56,7 +72,7 @@ const HomePage = () => {
               </p>
               <button 
                 className="mt-6 bg-pink-500 text-white px-6 py-3 rounded-full"
-                onClick={handleQuestClick}  // Menampilkan QuestPage
+                onClick={handleQuestClick}
               >
                 Ajukan Pertanyaan
               </button>
@@ -67,7 +83,7 @@ const HomePage = () => {
               <div className="flex items-center">
                 <div className="bg-purple-400 p-10 rounded-lg">
                   <i className="fas fa-graduation-cap text-white text-6xl"></i>
-                  <p className="text-white text-2xl mt-4">LearnFun</p>
+                  <img src={img} alt="Logo LF" className="h-16 w-16" />
                 </div>
                 <div className="ml-6">
                   <div className="flex items-center mb-4">
@@ -123,16 +139,18 @@ const HomePage = () => {
                       </div>
                     </div>
                     <p className="text-gray-700 mb-4">Lorem ipsum dolor sit amet consectetur.</p>
-                    <button className="bg-pink-500 text-white px-4 py-2 rounded-full">Lihat Jawaban</button>
+                    <Link to="/answer">
+                      <button className="bg-pink-500 text-white px-4 py-2 rounded-full">Lihat Jawaban</button>
+                    </Link>
                   </SwiperSlide>
                 ))}
               </Swiper>
             </section>
           </>
         ) : showLogin ? (
-          <LoginPage handleCloseLogin={handleCloseLogin} /> // Show LoginPage when showLogin is true
+          <LoginPage handleCloseLogin={handleCloseLogin} onLoginSuccess={handleLoginSuccess} /> 
         ) : (
-          <QuestPage /> // Show QuestPage when "Ajukan Pertanyaan" is clicked
+          <QuestPage />
         )}
       </main>
 
