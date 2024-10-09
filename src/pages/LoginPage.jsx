@@ -2,8 +2,24 @@ import React from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import img from '../assets/a1.png'; // Pastikan ini adalah jalur yang benar ke gambar Anda.
 
-const LoginPage = () => {
+const LoginPage = ({ handleCloseLogin, onLoginSuccess }) => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    // Validasi: Pastikan email dan password diisi
+    if (!email || !password) {
+      alert('Harap masukkan email dan password yang valid.');
+      return;
+    }
+
+    // Proses login (Anda bisa menambahkan logika autentikasi di sini)
+    console.log('Login berhasil dengan:', { email, password });
+    onLoginSuccess(); // Panggil fungsi ini setelah login berhasil
+  };
 
   return (
     <div className="w-full flex flex-col md:flex-row min-h-screen font-inter">
@@ -11,18 +27,14 @@ const LoginPage = () => {
       <div className="flex w-full md:w-6/12 justify-center items-center">
         <div className="bg-white rounded-lg w-full px-[80px] md:flex md:flex-col md:items-center justify-center">
           <div className="flex items-center mb-6 w-full">
-            <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold mr-2">
-              LF
-            </div>
-            <h1 className="text-2xl font-bold text-pink-500">LearnFun</h1>
           </div>
-
-          <h2 className="text-2xl font-extrabold font-inter mb-2">MASUK</h2>
+          <h1 className="text-2xl font-extrabold font-inter mb-2">MASUK</h1>
           <p className="text-gray-600 mb-6 font-inter text-sm">
             Silakan masuk untuk menjawab pertanyaan dan berinteraksi dengan pengguna lainnya.
           </p>
 
-          <form className='w-full '>
+          {/* Form Login */}
+          <form className="w-full" onSubmit={handleLogin}>
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-700 text-sm font-bold font-inter mb-2">
                 Email address
@@ -30,6 +42,8 @@ const LoginPage = () => {
               <input
                 type="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 placeholder="Email Address"
                 required
@@ -44,6 +58,8 @@ const LoginPage = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                   placeholder="Password"
                   required

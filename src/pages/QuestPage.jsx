@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import AnPage from "./AnPage";
+
 
 // Data jawaban terbaik untuk setiap halaman
 const bestAnswersData = [
@@ -110,7 +113,9 @@ const AdditionalQuestions = () => {
     <div className="text-center mb-8">
       <h3 className="text-xl font-semibold">Ada Pertanyaan Lain?</h3>
       <div className="mt-4">
-        <button className="bg-yellow-500 text-white rounded-lg px-4 py-2 mr-2">Cari Jawaban Lain</button>
+        <Link to="/answer">
+          <button className="bg-yellow-500 text-white rounded-lg px-4 py-2 mr-2">Cari Jawaban Lain</button>    
+        </Link>
         <button className="bg-blue-700 text-white rounded-lg px-4 py-2">Tambahkan Pertanyaan</button>
       </div>
     </div>
