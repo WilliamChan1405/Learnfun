@@ -64,7 +64,7 @@ const HomePage = () => {
         {!showLogin && !showQuestPage ? (
           <>
             {/* Hero Section */}
-            <section className="text-center mb-10 bg-gradient-to-r from-purple-400 to-blue-400 p-6 text-white rounded-bl-[100px]">
+            <section className="text-center mb-10 bg-gradient-to-r from-purple-400 to-blue-400 p-6 text-white">
               <h1 className="text-4xl font-bold">Temukan Jawaban, Kembangkan Pengetahuan</h1>
               <p className="text-white mt-4">
                 LearnFun adalah solusi yang tepat untuk kamu yang ingin memperluas pengetahuan dan
