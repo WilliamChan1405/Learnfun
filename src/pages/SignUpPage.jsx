@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import LoginPage from './LoginPage';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import imglogo from '../assets/LF.png';
 import img from '../assets/a1.png';
 
 
@@ -13,15 +14,15 @@ const SignUpPage = () => {
       {/* Bagian Kiri */}
       <div className="flex w-full md:w-6/12 justify-center items-center">
         <div className=" bg-white rounded-lg  w-full  px-[80px] md:flex md:flex-col md:items-center justify-center">
-          <div className="flex items-center mb-6 w-full">
-            <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold mr-2">
-              LF
+          <div className="flex items-center mb-6 w-full gap-3">
+            <div className="bg-black p-2 rounded-full">
+              <img src={imglogo} alt="Logo LF" className="h-8 w-8" />
             </div>
-            <h1 className="text-2xl font-bold text-pink-500">LearnFun</h1>
+            <h1 className="text-2xl font-extrabold text-[#F492A1]">LearnFun</h1>
           </div>
 
           <h2 className="text-2xl font-extrabold font-inter mb-2">DAFTAR</h2>
-          <p className="text-gray-600 mb-6 font-inter text-sm">
+          <p className="text-[#818181] mb-6 font-inter text-sm">
             Mulai buat akun untuk dapat menjawab pertanyaanmu lebih cepat dan
             berinteraksi dengan pengguna lainnya
           </p>

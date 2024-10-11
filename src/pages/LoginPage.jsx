@@ -1,6 +1,7 @@
 import React from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import img from '../assets/a1.png'; // Pastikan ini adalah jalur yang benar ke gambar Anda.
+import img from '../assets/a1.png'
+import imglogo from '../assets/LF.png'; // Pastikan ini adalah jalur yang benar ke gambar Anda.
 
 const LoginPage = ({ handleCloseLogin, onLoginSuccess }) => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -27,6 +28,10 @@ const LoginPage = ({ handleCloseLogin, onLoginSuccess }) => {
       <div className="flex w-full md:w-6/12 justify-center items-center">
         <div className="bg-white rounded-lg w-full px-[80px] md:flex md:flex-col md:items-center justify-center">
           <div className="flex items-center mb-6 w-full">
+            <div className="bg-black p-2 rounded-full ">
+              <img src={imglogo} alt="Logo LF" className="h-8 w-8" />
+            </div>
+            <h1 className="text-2xl font-extrabold text-[#F492A1]">LearnFun</h1>
           </div>
           <h1 className="text-2xl font-extrabold font-inter mb-2">MASUK</h1>
           <p className="text-gray-600 mb-6 font-inter text-sm">

@@ -1,63 +1,54 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // Import useLocation
 import { Swiper, SwiperSlide } from 'swiper/react';
-import QuestPage from "./QuestPage";  // Impor QuestPage
+import QuestPage from './QuestPage';
 import img from '../assets/LF.png';
-import LoginPage from './LoginPage';  // Impor LoginPage
-import ProfilePage from "./ProfilePage";
-import AnPage from "./AnPage";
-
+import LoginPage from './LoginPage';
 import 'swiper/swiper-bundle.css'; // Import Swiper CSS
 
 const HomePage = () => {
-  const [showLogin, setShowLogin] = useState(false); // State to toggle login page
-  const [showQuestPage, setShowQuestPage] = useState(false); // State to toggle quest page
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State untuk menyimpan status login
+  const [showLogin, setShowLogin] = useState(false);
+  const [showQuestPage, setShowQuestPage] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLoginClick = () => {
-    setShowLogin(true);
-  };
+  const location = useLocation(); // Hook untuk melacak lokasi rute
 
-  const handleCloseLogin = () => {
-    setShowLogin(false);
-  };
-
-  const handleQuestClick = () => {
-    setShowQuestPage(true);
-  };
-
+  const handleLoginClick = () => setShowLogin(true);
+  const handleCloseLogin = () => setShowLogin(false);
+  const handleQuestClick = () => setShowQuestPage(true);
   const handleLoginSuccess = () => {
-    setIsLoggedIn(true); // Mengubah status login ke true saat login berhasil
-    setShowLogin(false); // Menutup halaman login
+    setIsLoggedIn(true);
+    setShowLogin(false);
   };
 
   return (
     <div>
-      {/* Header */}
-      <header className="bg-gradient-to-r from-purple-400 to-blue-400 p-6 text-white fixed top-0 w-full z-50 shadow-lg">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center">
-            <div className="bg-black p-2 rounded-full">
-              <img src={img} alt="Logo LF" className="h-8 w-8" />
-              <i className="fas fa-graduation-cap text-white"></i>
+      {/* Header akan disembunyikan jika path adalah '/login' */}
+      {location.pathname !== '/login' && (
+        <header className="bg-gradient-to-r from-purple-400 to-blue-400 p-6 text-white fixed top-0 w-full z-50 shadow-lg">
+          <div className="container mx-auto flex justify-between items-center">
+            <div className="flex items-center">
+              <div className="bg-black p-2 rounded-full">
+                <img src={img} alt="Logo LF" className="h-8 w-8" />
+              </div>
+              <span className="ml-3 text-2xl font-inter font-bold">LearnFun</span>
             </div>
-            <span className="ml-3 text-2xl font-bold">LearnFun</span>
+            <div>
+              {!isLoggedIn ? (
+                <>
+                  <Link to ="/login" className="bg-blue-600 px-4 py-2 rounded font-inter text-white">Masuk</Link>
+                  <Link to="/signup" className="bg-blue-600 px-4 py-2 rounded font-inter text-white">Daftar</Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/profile" className="bg-blue-600 px-4 py-2 rounded font-inter text-white">Profile</Link>
+                  <Link to="/logout" className="bg-blue-600 px-4 py-2 rounded font-inter text-white">Keluar</Link>
+                </>)
+              }
+            </div>
           </div>
-          <div>
-            {!isLoggedIn ? ( // Tampilkan tombol masuk dan daftar jika belum login
-              <>
-                <button onClick={handleLoginClick} className="mr-4 text-white">Masuk</button>
-                <Link to={'/signup'} className="bg-blue-600 px-4 py-2 rounded text-white">Daftar</Link>
-              </>
-            ) : ( // Tampilkan tombol profile jika sudah login
-              <Link to="/profile">
-             <button className="bg-gray-500 text-white px-4 py-2 rounded">Profile</button>
-              </Link>
-
-            )}
-          </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Main Content */}
       <main className="container mx-auto pt-24">
@@ -130,7 +121,12 @@ const HomePage = () => {
                 }}
               >
                 {Array(10).fill().map((_, i) => (
-                  <SwiperSlide key={i} className="bg-white p-6 rounded-lg shadow">
+                  <SwiperSlide key={i} className="bg-white p-6 rounded-lg shadow relative">
+                    {/* Tombol Laporkan Jawaban di pojok kanan atas */}
+                    <button className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full">
+                      Laporkan Jawaban
+                    </button>
+
                     <div className="flex items-center mb-4">
                       <img src="https://placehold.co/50x50" alt="User avatar" className="rounded-full" />
                       <div className="ml-4">
@@ -138,7 +134,14 @@ const HomePage = () => {
                         <p className="text-gray-500">11 Sep 2024</p>
                       </div>
                     </div>
+                    
                     <p className="text-gray-700 mb-4">Lorem ipsum dolor sit amet consectetur.</p>
+
+                    {/* Tombol Bookmark */}
+                    <div className="mb-4 flex justify-center">
+                      <i className="fas fa-bookmark text-gray-300" style={{ cursor: 'pointer' }}></i>
+                    </div>
+
                     <Link to="/answer">
                       <button className="bg-pink-500 text-white px-4 py-2 rounded-full">Lihat Jawaban</button>
                     </Link>
@@ -148,7 +151,7 @@ const HomePage = () => {
             </section>
           </>
         ) : showLogin ? (
-          <LoginPage handleCloseLogin={handleCloseLogin} onLoginSuccess={handleLoginSuccess} /> 
+          <LoginPage handleCloseLogin={handleCloseLogin} onLoginSuccess={handleLoginSuccess} />
         ) : (
           <QuestPage />
         )}
