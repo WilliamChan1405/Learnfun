@@ -4,13 +4,30 @@ import { Link } from 'react-router-dom';
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-    const [showEditProfile, setShowEditProfile] = useState(false); // State untuk form edit profile
-    const [avatar, setAvatar] = useState(null); // State untuk menyimpan file avatar
+    const [showEditProfile, setShowEditProfile] = useState(false);
+    const [avatar, setAvatar] = useState(null);
 
     useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem('user'));
-        setUser(userData);
+        const userId = localStorage.getItem('userId'); // Use userId from localStorage
+
+        if (userId) {
+            fetchUserProfile(userId);
+        }
     }, []);
+
+    const fetchUserProfile = async (userId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/users/${userId}`);
+            const data = await response.json();
+            if (response.ok) {
+                setUser(data);
+            } else {
+                console.error('Failed to fetch user profile:', data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
 
     const handleLogoutClick = () => {
         setShowLogoutConfirm(true);
@@ -19,7 +36,7 @@ const ProfilePage = () => {
     const handleConfirmLogout = () => {
         alert("Anda telah keluar dari akun!");
         setShowLogoutConfirm(false);
-        localStorage.removeItem('user');
+        localStorage.removeItem('userId');
         window.location.href = '/';
     };
 
@@ -54,7 +71,7 @@ const ProfilePage = () => {
             const data = await response.json();
             if (response.ok) {
                 alert('Avatar berhasil diperbarui.');
-                setUser({ ...user, avatar: data.avatarUrl }); // Update user data
+                fetchUserProfile(user.id); // Re-fetch user profile to get updated avatar
                 setShowEditProfile(false);
             } else {
                 alert('Gagal memperbarui avatar.');

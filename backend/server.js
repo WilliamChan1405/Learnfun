@@ -255,7 +255,21 @@ app.get('/api/questions/:id/answers', (req, res) => {
     });
   });
   
-
+// Endpoint to get user profile by userId
+app.get('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+    db.query('SELECT id, name, email, avatar FROM users WHERE id = ?', [userId], (error, results) => {
+      if (error) {
+        return res.status(500).json({ message: 'Failed to fetch user profile.' });
+      }
+      if (results.length > 0) {
+        res.status(200).json(results[0]);
+      } else {
+        res.status(404).json({ message: 'User not found.' });
+      }
+    });
+  });
+  
   
 // Jalankan server
 app.listen(PORT, () => {
