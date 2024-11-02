@@ -5,10 +5,10 @@ import ProfilePage from "./pages/ProfilePage";
 import ErrorPage from "./pages/ErrorPage";  // Import the error page
 import AnPage from "./pages/AnPage";
 import LoginPage from "./pages/LoginPage";
-import NotificationPage from "./pages/NotificationPage";
 import BookmarkPage from "./pages/BookmarkPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
-import QuestPage from "./pages/QuestPage"; // Pastikan ini ada
+import QuestPage from "./pages/QuestPage"; 
+import HomePageLogin from "./pages/HomePageLogin";
 
 
 export const route = createBrowserRouter([
@@ -38,11 +38,6 @@ export const route = createBrowserRouter([
         errorElement: <ErrorPage />,  // Add error handling
     },
     {
-        path: '/notif',
-        element: <NotificationPage />,
-        errorElement: <ErrorPage />,  // Add error handling
-    },
-    {
         path: '/book',
         element: <BookmarkPage />,
         errorElement: <ErrorPage />,  // Add error handling
@@ -55,6 +50,10 @@ export const route = createBrowserRouter([
         path: '/quest',
         element: <QuestPage />,
         errorElement: <ErrorPage />,  // Add error handling
+    },{
+        path: '/HomePageLogin',
+        element: <HomePageLogin />,
+        errorElement: <ErrorPage />,
     },
  
 ]);

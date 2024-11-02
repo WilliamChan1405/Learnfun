@@ -269,6 +269,90 @@ app.get('/api/users/:id', (req, res) => {
       }
     });
   });
+
+// Tambah atau hapus bookmark pada jawaban
+// Tambah atau hapus bookmark pada jawaban
+app.post('/api/answers/:id/bookmark', (req, res) => {
+    const answerId = req.params.id;
+    const { userId } = req.body;
+
+    if (!userId || !answerId) {
+        return res.status(400).json({ message: 'User ID and Answer ID are required' });
+    }
+
+    // Cek apakah bookmark sudah ada
+    const checkQuery = 'SELECT * FROM favorites WHERE UserID = ? AND AnswerID = ?';
+    db.query(checkQuery, [userId, answerId], (checkError, checkResults) => {
+        if (checkError) {
+            console.error('Database error:', checkError);
+            return res.status(500).json({ message: 'Database error' });
+        }
+
+        // Jika bookmark sudah ada, berikan respon bahwa bookmark sudah ada
+        if (checkResults.length > 0) {
+            return res.status(400).json({ message: 'Answer already bookmarked' });
+        }
+
+        // Jika belum ada, tambahkan bookmark baru
+        const insertQuery = 'INSERT INTO favorites (UserID, AnswerID, created_at) VALUES (?, ?, NOW())';
+        db.query(insertQuery, [userId, answerId], (insertError, results) => {
+            if (insertError) {
+                console.error('Database error:', insertError);
+                return res.status(500).json({ message: 'Database error' });
+            }
+            res.status(200).json({ message: 'Answer bookmarked successfully' });
+        });
+    });
+});
+
+
+app.get('/api/users/:userId/bookmarks', (req, res) => {
+    const userId = req.params.userId;
+
+    const query = `
+        SELECT f.FavoriteID, f.created_at, a.question_id AS QuestionID, a.answer, u.name AS answer_user_name
+        FROM favorites f
+        JOIN answers a ON f.AnswerID = a.id
+        JOIN users u ON a.user_id = u.id
+        WHERE f.UserID = ?
+    `;
+
+    db.query(query, [userId], (error, results) => {
+        if (error) {
+            console.error('Database error:', error);
+            return res.status(500).json({ message: 'Failed to fetch bookmarks' });
+        }
+        res.status(200).json(results);
+    });
+});
+
+
+app.get('/api/users/:userId/latest-favorite', (req, res) => {
+    const userId = req.params.userId;
+    
+    const query = `
+        SELECT f.FavoriteID, f.created_at, a.answer, a.question_id, u.name AS userName, u.avatar AS userAvatar
+        FROM favorites f
+        JOIN answers a ON f.AnswerID = a.id
+        JOIN users u ON a.user_id = u.id
+        WHERE f.UserID = ?
+        ORDER BY f.created_at DESC
+        LIMIT 1
+    `;
+
+    db.query(query, [userId], (error, results) => {
+        if (error) {
+            console.error('Database error:', error);
+            return res.status(500).json({ message: 'Failed to fetch latest favorite' });
+        }
+        if (results.length > 0) {
+            res.status(200).json(results[0]);
+        } else {
+            res.status(404).json({ message: 'No favorites found' });
+        }
+    });
+});
+
   
   
 // Jalankan server

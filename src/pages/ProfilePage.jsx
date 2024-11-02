@@ -88,7 +88,7 @@ const ProfilePage = () => {
             <div className="w-1/4 bg-purple-400 p-4">
                 <div className="flex flex-col items-center">
                     <div className="w-full mb-4">
-                        <button className="w-full flex items-center p-2 text-white hover:bg-purple-500 rounded">
+                        <button className="w-full flex items-center p-2 text-white bg-purple-500 rounded">
                             <i className="fas fa-user mr-2"></i>
                             <span>Account</span>
                         </button>
@@ -98,14 +98,6 @@ const ProfilePage = () => {
                             <button className="w-full flex items-center p-2 text-white hover:bg-purple-500 rounded">
                                 <i className="fas fa-bookmark mr-2"></i>
                                 <span>Bookmark</span>
-                            </button>
-                        </Link>
-                    </div>
-                    <div className="w-full mb-4">
-                        <Link to="/notif">
-                            <button className="w-full flex items-center p-2 text-white hover:bg-purple-500 rounded">
-                                <i className="fas fa-bell mr-2"></i>
-                                <span>Notification</span>
                             </button>
                         </Link>
                     </div>
@@ -131,7 +123,7 @@ const ProfilePage = () => {
                         <img
                             src={user && user.avatar ? user.avatar : "https://placehold.co/100x100"}
                             alt="Profile avatar"
-                            className="rounded-full"
+                            className="w-24 h-24 rounded-full object-cover"
                         />
                     </div>
                     <div className="w-full max-w-md">

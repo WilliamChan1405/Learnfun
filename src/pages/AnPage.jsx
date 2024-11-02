@@ -186,36 +186,6 @@ const Question = () => {
   );
 };
 
-// Komponen BestAnswer tetap
-// const BestAnswer = ({ name, date, content, rating }) => {
-//   return (
-//     <section className="bg-white shadow-md rounded-lg p-6 mb-8">
-//       <h2 className="text-white bg-gradient-to-r from-purple-400 to-blue-300 rounded-t-lg p-2">Jawaban Terbaik</h2>
-//       <div className="flex items-start mt-4">
-//         <img src="https://placehold.co/50x50" alt="User avatar" className="rounded-full w-12 h-12"/>
-//         <div className="ml-4">
-//           <div className="flex items-center">
-//             <span className="font-bold">{name}</span>
-//             <span className="text-gray-500 ml-2">{date}</span>
-//           </div>
-//           <p className="mt-2 text-gray-700">{content}</p>
-//           <div className="flex items-center mt-2">
-//             {[...Array(5)].map((_, index) => (
-//               <span key={index} className="text-yellow-500">
-//                 <i className={index < Math.floor(rating) ? "fas fa-star" : (rating % 1 >= 0.5 && index < Math.ceil(rating) ? "fas fa-star-half-alt" : "far fa-star")}></i>
-//               </span>
-//             ))}
-//           </div>
-//         </div>
-//         <div className="ml-auto flex items-center">
-//           <i className="fas fa-flag text-gray-500"></i>
-//           <i className="fas fa-heart text-red-500 ml-4"></i>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
 const BestAnswer = () => {
   const { questionId } = useParams();
   const [answers, setAnswers] = useState([]);
@@ -265,11 +235,37 @@ const BestAnswer = () => {
     }
   };
 
+  const handleBookmark = async (answerId) => {
+      const userId = localStorage.getItem('userId');
+
+      try {
+          const response = await fetch(`http://localhost:5000/api/answers/${answerId}/bookmark`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ userId }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+              alert('Answer bookmarked successfully.');
+          } else {
+              alert(data.message);
+          }
+      } catch (error) {
+          console.error('Error bookmarking answer:', error);
+      }
+  };
+
+
+
   return (
     <section className="bg-white shadow-md rounded-lg p-6 mb-8">
       <h2 className="text-white bg-gradient-to-r from-purple-400 to-blue-300 rounded-t-lg p-2">Jawaban Terbaik</h2>
       {answers.map((answer) => (
-        <div key={answer.id} className="flex items-start mt-4 mb-6">
+        <div key={answer.id} className="relative flex items-start mt-4 mb-6">
           <img src={answer.userAvatar || 'https://placehold.co/50x50'} alt="User avatar" className="rounded-full w-12 h-12" />
           <div className="ml-4 w-full">
             <div className="flex items-center">
@@ -285,6 +281,12 @@ const BestAnswer = () => {
                 Like
               </button>
               <span>{answer.likeCount} Likes</span>
+              <button
+                onClick={() => handleBookmark(answer.id)}
+                className="bg-blue-500 text-white rounded-full px-3 py-1 ml-4"
+              >
+                Bookmark
+              </button>
             </div>
           </div>
         </div>
@@ -292,6 +294,7 @@ const BestAnswer = () => {
     </section>
   );
 };
+
 
 // Komponen Pagination tetap
 const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {

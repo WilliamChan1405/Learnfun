@@ -36,7 +36,7 @@ const LoginPage = ({ onLoginSuccess }) => {
         localStorage.setItem('userId', data.user.id);
 
         // Arahkan ke halaman HomePageLogin atau halaman utama setelah login
-        navigate('/');
+        navigate('/HomePageLogin');
       } else {
         alert(data.message); // Menampilkan pesan error jika login gagal
       }
