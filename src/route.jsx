@@ -8,6 +8,8 @@ import LoginPage from "./pages/LoginPage";
 import NotificationPage from "./pages/NotificationPage";
 import BookmarkPage from "./pages/BookmarkPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import QuestPage from "./pages/QuestPage"; // Pastikan ini ada
+
 
 export const route = createBrowserRouter([
     {
@@ -31,7 +33,7 @@ export const route = createBrowserRouter([
         errorElement: <ErrorPage />,  // Add error handling
     },
     {
-        path: '/answer',
+        path: '/answer/:questionId',
         element: <AnPage />,
         errorElement: <ErrorPage />,  // Add error handling
     },
@@ -48,6 +50,10 @@ export const route = createBrowserRouter([
     {
         path: '/change',
         element: <ChangePasswordPage />,
+        errorElement: <ErrorPage />,  // Add error handling
+    },{
+        path: '/quest',
+        element: <QuestPage />,
         errorElement: <ErrorPage />,  // Add error handling
     },
  

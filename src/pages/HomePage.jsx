@@ -1,21 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom'; // Import useLocation
 import { Swiper, SwiperSlide } from 'swiper/react';
 import QuestPage from './QuestPage';
 import img from '../assets/LF.png';
 import LoginPage from './LoginPage';
 import 'swiper/swiper-bundle.css'; // Import Swiper CSS
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showQuestPage, setShowQuestPage] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [questions, setQuestions] = useState([]); // State untuk menyimpan pertanyaan
+  const navigate = useNavigate();
 
   const location = useLocation(); // Hook untuk melacak lokasi rute
 
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/questions'); // Endpoint untuk mendapatkan semua pertanyaan
+        const data = await response.json();
+        if (response.ok) {
+          setQuestions(data); // Simpan data ke state
+        } else {
+          console.error('Gagal mengambil pertanyaan:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching questions:', error);
+      }
+    };
+
+    fetchQuestions(); // Panggil fungsi untuk mengambil pertanyaan saat komponen dimuat
+  }, []);
+
   const handleLoginClick = () => setShowLogin(true);
   const handleCloseLogin = () => setShowLogin(false);
-  const handleQuestClick = () => setShowQuestPage(true);
+  const handleQuestClick = () => navigate('/quest');
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
     setShowLogin(false);
@@ -36,7 +57,7 @@ const HomePage = () => {
             <div>
               {!isLoggedIn ? (
                 <>
-                  <Link to ="/login" className="bg-blue-600 px-4 py-2 rounded font-inter text-white">Masuk</Link>
+                  <Link to="/login" className="bg-blue-600 px-4 py-2 rounded font-inter text-white">Masuk</Link>
                   <Link to="/signup" className="bg-blue-600 px-4 py-2 rounded font-inter text-white">Daftar</Link>
                 </>
               ) : (
@@ -69,86 +90,45 @@ const HomePage = () => {
               </button>
             </section>
 
-            {/* Testimonial Section */}
-            <section className="bg-pink-100 p-6 rounded-lg mb-10">
-              <div className="flex items-center">
-                <div className="bg-purple-400 p-10 rounded-lg">
-                  <i className="fas fa-graduation-cap text-white text-6xl"></i>
-                  <img src={img} alt="Logo LF" className="h-16 w-16" />
-                </div>
-                <div className="ml-6">
-                  <div className="flex items-center mb-4">
-                    <img src="https://placehold.co/50x50" alt="User avatar" className="rounded-full" />
-                    <div className="ml-4">
-                      <p className="font-bold">Irma Amelia N</p>
-                      <p className="text-gray-500">11 Sep 2024</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-700 mb-4">Lorem ipsum dolor sit amet consectetur.</p>
-                  <div className="flex items-center">
-                    <div className="text-yellow-500">
-                      <i className="fas fa-star"></i>
-                      <i className="fas fa-star"></i>
-                      <i className="fas fa-star"></i>
-                      <i className="fas fa-star"></i>
-                      <i className="fas fa-star-half-alt"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
             {/* Pertanyaan Terbaru (Question Carousel) */}
             <section>
-              <h2 className="text-2xl font-bold mb-6">Pertanyaan Terbaru</h2>
-              <Swiper
-                spaceBetween={10}
-                slidesPerView={1}
-                pagination={{ clickable: true }}
-                breakpoints={{
-                  640: {
-                    slidesPerView: 1,
-                    spaceBetween: 20,
-                  },
-                  768: {
-                    slidesPerView: 2,
-                    spaceBetween: 40,
-                  },
-                  1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 50,
-                  },
-                }}
-              >
-                {Array(10).fill().map((_, i) => (
-                  <SwiperSlide key={i} className="bg-white p-6 rounded-lg shadow relative">
-                    {/* Tombol Laporkan Jawaban di pojok kanan atas */}
-                    <button className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full">
-                      Laporkan Jawaban
-                    </button>
-
-                    <div className="flex items-center mb-4">
-                      <img src="https://placehold.co/50x50" alt="User avatar" className="rounded-full" />
-                      <div className="ml-4">
-                        <p className="font-bold">Irma Amelia N</p>
-                        <p className="text-gray-500">11 Sep 2024</p>
-                      </div>
+            <h2 className="text-2xl font-bold mb-6">Pertanyaan Terbaru</h2>
+            <Swiper
+              spaceBetween={10}
+              slidesPerView={1}
+              pagination={{ clickable: true }}
+              breakpoints={{
+                640: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 40,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 50,
+                },
+              }}
+            >
+              {questions.map((question, index) => (
+                <SwiperSlide key={index} className="bg-white p-6 rounded-lg shadow relative">
+                  <div className="flex items-start mb-4">
+                    <img src={question.userAvatar || "https://placehold.co/50x50"} alt="User avatar" className="rounded-full w-12 h-12" />
+                    <div className="ml-4">
+                      <p className="font-bold">{question.userName}</p>
+                      <p className="text-gray-500">{new Date(question.created_at).toLocaleString()}</p>
                     </div>
-                    
-                    <p className="text-gray-700 mb-4">Lorem ipsum dolor sit amet consectetur.</p>
-
-                    {/* Tombol Bookmark */}
-                    <div className="mb-4 flex justify-center">
-                      <i className="fas fa-bookmark text-gray-300" style={{ cursor: 'pointer' }}></i>
-                    </div>
-
-                    <Link to="/answer">
-                      <button className="bg-pink-500 text-white px-4 py-2 rounded-full">Lihat Jawaban</button>
-                    </Link>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </section>
+                  </div>
+                  <p className="text-gray-700 mb-4">{question.body}</p>
+                  <Link to={`/answer/${question.id}`}>
+                    <button className="bg-pink-500 text-white px-4 py-2 rounded-full">Lihat Jawaban</button>
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </section>
           </>
         ) : showLogin ? (
           <LoginPage handleCloseLogin={handleCloseLogin} onLoginSuccess={handleLoginSuccess} />
@@ -162,17 +142,6 @@ const HomePage = () => {
         <div className="container mx-auto text-center">
           <p>&copy; 2024 Web LearnFun</p>
           <p>Temukan Jawaban, Kembangkan Pengetahuan</p>
-          <div className="flex justify-center mt-4">
-            <a href="#" className="mx-2">
-              <i className="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" className="mx-2">
-              <i className="fab fa-instagram"></i>
-            </a>
-            <a href="#" className="mx-2">
-              <i className="fab fa-linkedin-in"></i>
-            </a>
-          </div>
         </div>
       </footer>
     </div>
