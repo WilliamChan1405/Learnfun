@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css'; // Import Swiper styles
 
-
-const HomePage = () => {
+const HomePageLogin = ({ username, onLogout }) => {
   return (
     <div>
       {/* Header */}
@@ -17,10 +16,10 @@ const HomePage = () => {
             <span className="ml-3 text-2xl font-bold">LearnFun</span>
           </div>
           <div>
-            <button className="mr-4 text-white">Masuk</button>
-            <Link to="/signup" className="bg-blue-600 px-4 py-2 rounded text-white">
-              Daftar
-            </Link>
+            <span className="mr-4">Welcome, {username}!</span>
+            <button onClick={onLogout} className="bg-red-600 px-4 py-2 rounded text-white">
+              Keluar
+            </button>
           </div>
         </div>
       </header>
@@ -28,7 +27,7 @@ const HomePage = () => {
       {/* Hero Section */}
       <main className="container mx-auto mt-10">
         <section className="text-center mb-10 bg-gradient-to-r from-purple-400 to-blue-400 p-6 text-white">
-          <h1 className="text-4xl font-bold">Temukan Jawaban, Kembangkan Pengetahuan</h1>
+          <h1 className="text-4xl font-bold">Selamat Datang di LearnFun, {username}!</h1>
           <p className="text-white mt-4">
             LearnFun adalah solusi yang tepat untuk kamu yang ingin memperluas pengetahuan dan
             mendapatkan jawaban atas semua pertanyaanmu
@@ -119,4 +118,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default HomePageLogin;

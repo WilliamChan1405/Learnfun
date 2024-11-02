@@ -1,5 +1,5 @@
 import React from 'react';
-import Profil from './profil'; // Import komponen Profil
+import Profil from './Profil'; // Import komponen Profil
 
 const HomePageLogin = () => {
     return (

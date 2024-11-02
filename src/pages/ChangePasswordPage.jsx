@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ProfilePage from "./ProfilePage";
-import BookmarkPage from "./BookmarkPage";
-import NotificationPage from "./NotificationPage";
 
 const ChangePasswordPage = () => {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleSave = () => {
-        // Logic untuk menyimpan kata sandi baru
-        if (newPassword === confirmPassword) {
-            alert('Password successfully changed!');
-        } else {
+    // Contoh ID pengguna yang login (dapatkan dari konteks login atau localStorage)
+    const userId = localStorage.getItem('userId'); // Sesuaikan penyimpanan userId ini sesuai implementasi login Anda
+
+    const handleSave = async () => {
+        if (newPassword !== confirmPassword) {
             alert('Passwords do not match!');
+            return;
+        }
+    
+        console.log('Data yang dikirim:', { userId, oldPassword, newPassword }); // Tambahkan ini untuk debugging
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/change-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, oldPassword, newPassword }),
+            });
+    
+            const data = await response.json();
+            if (response.ok) {
+                alert(data.message);
+            } else {
+                alert(data.message || "Terjadi kesalahan saat mengganti password.");
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert("Terjadi kesalahan jaringan atau server.");
         }
     };
+    
 
     return (
         <div className="flex h-screen bg-blue-200">

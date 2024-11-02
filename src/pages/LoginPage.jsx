@@ -1,25 +1,49 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import img from '../assets/a1.png'
-import imglogo from '../assets/LF.png'; // Pastikan ini adalah jalur yang benar ke gambar Anda.
+import img from '../assets/a1.png';
+import imglogo from '../assets/LF.png';
 
-const LoginPage = ({ handleCloseLogin, onLoginSuccess }) => {
+const LoginPage = ({ onLoginSuccess }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const navigate = useNavigate(); // Hook untuk navigasi
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Validasi: Pastikan email dan password diisi
     if (!email || !password) {
       alert('Harap masukkan email dan password yang valid.');
       return;
     }
 
-    // Proses login (Anda bisa menambahkan logika autentikasi di sini)
-    console.log('Login berhasil dengan:', { email, password });
-    onLoginSuccess(); // Panggil fungsi ini setelah login berhasil
+    try {
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.message); // Login berhasil
+
+        // Simpan userId di localStorage setelah login berhasil
+        localStorage.setItem('userId', data.user.id);
+
+        // Arahkan ke halaman HomePageLogin atau halaman utama setelah login
+        navigate('/');
+      } else {
+        alert(data.message); // Menampilkan pesan error jika login gagal
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert("Terjadi kesalahan saat login.");
+    }
   };
 
   return (
@@ -90,35 +114,6 @@ const LoginPage = ({ handleCloseLogin, onLoginSuccess }) => {
               MASUK
             </button>
           </form>
-
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500 font-inter">atau masuk dengan</span>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <button className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                <img className="h-5 w-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo" />
-                <span className="ml-2">Google</span>
-              </button>
-              <button className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                <img className="h-5 w-5" src="https://www.svgrepo.com/show/448224/facebook.svg" alt="Facebook logo" />
-                <span className="ml-2">Facebook</span>
-              </button>
-            </div>
-          </div>
-
-          <p className="mt-8 text-center text-sm text-gray-600 font-inter">
-            Belum punya akun?{" "}
-            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-              Daftar
-            </a>
-          </p>
         </div>
       </div>
 
