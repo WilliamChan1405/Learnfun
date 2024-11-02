@@ -147,7 +147,6 @@ const AdditionalQuestions = () => {
         <Link to="/answer">
           <button className="bg-yellow-500 text-white rounded-lg px-4 py-2 mr-2">Cari Jawaban Lain</button>    
         </Link>
-        <button className="bg-blue-700 text-white rounded-lg px-4 py-2">Tambahkan Pertanyaan</button>
       </div>
     </div>
   );
